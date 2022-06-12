@@ -65,9 +65,9 @@ const computeSss = (salary: number) => {
 };
 
 const philHealthTable = [
-  [NaN, 10000, () => 300],
-  [10000.01, 59999.99, (mon: number) => mon * 0.03],
-  [60000, NaN, () => 1800],
+  [NaN, 10000, () => 400],
+  [10000.01, 79999.99, (mon: number) => mon * 0.04],
+  [80000, NaN, () => 3200],
 ];
 
 const computePhilHealth = (monthly: number) =>

@@ -67,6 +67,9 @@ function App() {
   const [use2023, setUse2023] = useState(false);
   const [contributions, setContributions] =
     useState<IMandatoryContributions>(initialContributions);
+  useEffect(() => {
+
+  })
   const [summary, setSummary] = useState<ITaxSummary>({
     gross: 0,
     taxable: 0,
@@ -86,6 +89,7 @@ function App() {
   }, [darkMode, themeContext]);
 
   useEffect(() => {
+
     let _monthly = isNaN(parseFloat(values.monthly))
       ? 0
       : parseFloat(values.monthly);
@@ -93,7 +97,10 @@ function App() {
       ? 0
       : parseFloat(values.deminimis);
     const annual = computeAnnual(_monthly);
+    console.log(_monthly)
     const contributions = computeContributions(values.employerType, _monthly);
+    console.log(contributions)
+    console.log(values.employerType)
     const taxable = computeTaxableIncome(annual, contributions, _deminimis);
     setContributions(contributions);
     const taxDue = computeTaxDue(taxable.taxable, use2023 ? "2023" : "2018");
@@ -109,7 +116,7 @@ function App() {
     <>
       <Block
         height={["100%"]}
-        backgroundColor={theme.colors.background}
+        backgroundColor={theme.colors.backgroundPrimary}
         overflow={"auto"}
       >
         <Block
@@ -147,7 +154,11 @@ function App() {
               flexGridRowGap="scale800"
             >
               <FlexGridItem>
-                <Panel>
+                <Panel
+                  style={{
+                    backgroundColor: theme.colors.backgroundSecondary,
+                    padding: theme.sizing.scale800,
+                  }}>
                   <LabelLarge>Income</LabelLarge>
                   <LabelXSmall>Monthly</LabelXSmall>
                   <Block marginTop={theme.sizing.scale800}>
@@ -229,7 +240,7 @@ function App() {
                     {t("info.pagibig")}
                   </InfoLink>
                   <InfoLink
-                    link="https://www.philhealth.gov.ph/partners/employers/ContributionTable.pdf"
+                    link="https://www.philhealth.gov.ph/advisories/2022/adv2022-0010.pdf"
                     linkLabel={t("info.philHealthContrib")}
                   >
                     {t("info.philHealth")}

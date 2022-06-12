@@ -110,7 +110,7 @@ const TaxSummary: React.FC<ITaxSummary> = (props) => {
           </LabelSmall>
         </Block>
         <Block
-          backgroundColor={theme.colors.backgroundInv}
+          backgroundColor={theme.colors.backgroundInversePrimary}
           color={"white"}
           display={"flex"}
           flexDirection={"column"}
