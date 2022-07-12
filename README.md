@@ -1,6 +1,6 @@
 [![Apply Infrastructure](https://github.com/darylenterprises/ui.tax-calculator/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/darylenterprises/ui.tax-calculator/actions/workflows/deploy.yml)
 
-# Tax Calculator PH
+# Tax Calculator PH 
 
 Calculate your income tax.
 
