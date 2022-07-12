@@ -111,7 +111,7 @@ jobs:
 
       - name: Upload to blob storage
         run: |
-          az storage blob upload-batch --account-name "${STORAGE_ACCOUNT}" -d "${STORAGE_CONTAINER}" -s ./build
+          az storage blob upload-batch --account-name "${STORAGE_ACCOUNT}" -d "${STORAGE_CONTAINER}" -s ./build --overwrite
       
       - name: Purge CDN endpoint
         run: |
