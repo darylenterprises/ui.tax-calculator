@@ -23,6 +23,7 @@ import {
   computeAnnual,
   computeTaxableIncome,
   computeTaxDue,
+  getTaxBracketCalculation,
 } from "./lib/ra-10963";
 import { useTheme } from "./providers/ThemeProvider";
 
@@ -64,17 +65,16 @@ function App() {
   );
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [period, setPeriod] = useState<ISummaryPeriod>("Annual");
-  const [use2023, setUse2023] = useState(false);
+  const [use2023, setUse2023] = useState(new Date().getFullYear() >= 2023);
   const [contributions, setContributions] =
     useState<IMandatoryContributions>(initialContributions);
-  useEffect(() => {
-
-  })
+  useEffect(() => {});
   const [summary, setSummary] = useState<ITaxSummary>({
     gross: 0,
     taxable: 0,
     nonTaxable: 0,
     taxDue: 0,
+    taxComputation: "",
     takeHome: 0,
     totalContribution: 0,
     deminimis: 0,
@@ -89,7 +89,6 @@ function App() {
   }, [darkMode, themeContext]);
 
   useEffect(() => {
-
     let _monthly = isNaN(parseFloat(values.monthly))
       ? 0
       : parseFloat(values.monthly);
@@ -97,16 +96,20 @@ function App() {
       ? 0
       : parseFloat(values.deminimis);
     const annual = computeAnnual(_monthly);
-    console.log(_monthly)
+    console.log(_monthly);
     const contributions = computeContributions(values.employerType, _monthly);
-    console.log(contributions)
-    console.log(values.employerType)
+    console.log(contributions);
+    console.log(values.employerType);
     const taxable = computeTaxableIncome(annual, contributions, _deminimis);
     setContributions(contributions);
     const taxDue = computeTaxDue(taxable.taxable, use2023 ? "2023" : "2018");
     setSummary({
       ...taxable,
       taxDue,
+      taxComputation: getTaxBracketCalculation(
+        taxable.taxable,
+        use2023 ? "2023" : "2018"
+      ),
       takeHome: taxable.gross - taxDue - taxable.totalContribution,
       period,
     });
@@ -158,7 +161,8 @@ function App() {
                   style={{
                     backgroundColor: theme.colors.backgroundSecondary,
                     padding: theme.sizing.scale800,
-                  }}>
+                  }}
+                >
                   <LabelLarge>Income</LabelLarge>
                   <LabelXSmall>Monthly</LabelXSmall>
                   <Block marginTop={theme.sizing.scale800}>
@@ -197,6 +201,11 @@ function App() {
                     <Radio value="Biweekly">{t("period.biweekly")}</Radio>
                   </RadioGroup>
 
+                  {summary.taxComputation != "None" && (
+                    <ParagraphXSmall>
+                      * {summary.taxComputation}
+                    </ParagraphXSmall>
+                  )}
                   <ParagraphXSmall>{t("period.warning")}</ParagraphXSmall>
                 </Panel>
 

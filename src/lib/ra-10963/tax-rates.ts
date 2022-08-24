@@ -1,3 +1,5 @@
+import { peso } from "../util";
+
 export const computeAnnual = (monthlySalary: number) => monthlySalary * 12;
 export const computeTaxableIncome = (
   annualSalary: number,
@@ -82,6 +84,82 @@ const brackets: { [key: string]: IBracket[] } = {
     },
   ],
 };
+
+const bracketInfo: { [key: string]: IBracketInfo[] } = {
+  2018: [
+    {
+      condition: bracketCondition(NaN, 250000),
+      display: "None",
+    },
+    {
+      condition: bracketCondition(250000, 400000),
+      display: `20% of excess over ${peso.format(250000)}`,
+    },
+    {
+      condition: bracketCondition(400000, 800000),
+      display: `${peso.format(30000)} + 25% of excess over ${peso.format(
+        400000
+      )}`,
+    },
+    {
+      condition: bracketCondition(800000, 2000000),
+      display: `${peso.format(130000)} + 30% of excess over ${peso.format(
+        800000
+      )}`,
+    },
+    {
+      condition: bracketCondition(2000000, 8000000),
+      display: `${peso.format(490000)} + 32% of excess over ${peso.format(
+        2000000
+      )}`,
+    },
+    {
+      condition: bracketCondition(8000000, NaN),
+      display: `${peso.format(2410000)} + 35% of excess over ${peso.format(
+        8000000
+      )}`,
+    },
+  ],
+  2023: [
+    {
+      condition: bracketCondition(NaN, 250000),
+      display: "None",
+    },
+    {
+      condition: bracketCondition(250000, 400000),
+      display: `15% of excess over ${peso.format(250000)}`,
+    },
+    {
+      condition: bracketCondition(400000, 800000),
+      display: `${peso.format(22500)} + 20% of excess over ${peso.format(
+        400000
+      )}`,
+    },
+    {
+      condition: bracketCondition(800000, 2000000),
+      display: `${peso.format(102500)} + 25% of excess over ${peso.format(
+        800000
+      )}`,
+    },
+    {
+      condition: bracketCondition(2000000, 8000000),
+      display: `${peso.format(402500)} + 30% of excess over ${peso.format(
+        2000000
+      )}`,
+    },
+    {
+      condition: bracketCondition(8000000, NaN),
+      display: `${peso.format(2202500)} + 35% of excess over ${peso.format(
+        8000000
+      )}`,
+    },
+  ],
+};
+
+export const getTaxBracketCalculation = (
+  taxableIncome: number,
+  period: "2018" | "2023" = "2018"
+) => bracketInfo[period].find((q) => q.condition(taxableIncome)).display;
 
 export const computeTaxDue = (
   taxableIncome: number,

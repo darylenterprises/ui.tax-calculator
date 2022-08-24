@@ -21,9 +21,15 @@ interface IBracket {
   calculate: (taxableIncome: number) => number;
 }
 
+interface IBracketInfo {
+  condition: (taxableIncome: number) => bool;
+  display: string;
+}
+
 interface ITaxSummary extends ITaxable {
   taxDue: number;
   takeHome: number;
+  taxComputation: string;
   period: ISummaryPeriod;
 }
 
