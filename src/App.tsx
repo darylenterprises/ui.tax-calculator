@@ -201,7 +201,7 @@ function App() {
                     <Radio value="Biweekly">{t("period.biweekly")}</Radio>
                   </RadioGroup>
 
-                  {summary.taxComputation != "None" && (
+                  {summary.taxComputation !== "None" && (
                     <ParagraphXSmall>
                       * {summary.taxComputation}
                     </ParagraphXSmall>
