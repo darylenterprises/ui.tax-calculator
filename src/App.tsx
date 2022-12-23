@@ -1,5 +1,6 @@
 import { styled, useStyletron } from "baseui";
 import { Block } from "baseui/block";
+import { Button } from "baseui/button";
 import { Checkbox, LABEL_PLACEMENT, STYLE_TYPE } from "baseui/checkbox";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
 import { StyledLink } from "baseui/link";
@@ -25,7 +26,7 @@ import {
   computeTaxDue,
   getTaxBracketCalculation,
 } from "./lib/ra-10963";
-import { useTheme } from "./providers/ThemeProvider";
+import Preferences from "./components/preferences";
 
 const Panel = styled("div", (props) => ({
   // border: `${props.$theme.borders.border600.borderStyle} ${props.$theme.borders.border600.borderWidth} ${props.$theme.borders.border600.borderColor}`,
@@ -55,20 +56,19 @@ const initialContributions = {
 
 function App() {
   const { t } = useTranslation();
+  const [openPreference, setOpenPreference] = useState(false);
   const [values, setValues] = useState<IIncomeForm>({
     monthly: "20000",
     deminimis: "",
     employerType: "pvt",
   });
-  const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
-  );
+  
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [period, setPeriod] = useState<ISummaryPeriod>("Annual");
   const [use2023, setUse2023] = useState(new Date().getFullYear() >= 2023);
+  const [period, setPeriod] = useState<ISummaryPeriod>("Annual");
   const [contributions, setContributions] =
     useState<IMandatoryContributions>(initialContributions);
-  useEffect(() => {});
+  useEffect(() => { });
   const [summary, setSummary] = useState<ITaxSummary>({
     gross: 0,
     taxable: 0,
@@ -81,12 +81,6 @@ function App() {
     period: "Annual",
   });
   const [, theme] = useStyletron();
-
-  const themeContext = useTheme();
-  useEffect(() => {
-    localStorage.setItem("theme", darkMode ? "dark" : "light");
-    themeContext.changeTheme(darkMode ? "dark" : "light");
-  }, [darkMode, themeContext]);
 
   useEffect(() => {
     let _monthly = isNaN(parseFloat(values.monthly))
@@ -131,15 +125,11 @@ function App() {
           display={"flex"}
           justifyContent={"end"}
         >
-          <Checkbox
-            checked={darkMode}
-            checkmarkType={STYLE_TYPE.toggle}
-            onChange={(e) => setDarkMode(e.currentTarget.checked)}
-            labelPlacement={LABEL_PLACEMENT.right}
-          >
-            {t("dark")}
-          </Checkbox>
+          <Button shape="pill" size="mini" onClick={() => setOpenPreference(true)}>
+            Preferences
+          </Button>
         </Block>
+
 
         <Block
           marginTop={[0, 0, "5rem", "5rem"]}
@@ -333,6 +323,7 @@ function App() {
           </StyledLink>
         </Block>
       </Block>
+      <Preferences isOpen={openPreference} setIsOpen={setOpenPreference} />
     </>
   );
 }

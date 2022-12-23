@@ -1,3 +1,5 @@
+import { philHealth } from "./philhealth";
+
 const bracket = (lower: number, upper: number) => (income: number) =>
   (Number.isNaN(lower) || income >= lower) &&
   (Number.isNaN(upper) || income <= upper);
@@ -64,17 +66,16 @@ const computeSss = (salary: number) => {
   return { sss, mpf };
 };
 
-const philHealthTable = [
-  [NaN, 10000, () => 400],
-  [10000.01, 79999.99, (mon: number) => mon * 0.04],
-  [80000, NaN, () => 3200],
-];
-
-const computePhilHealth = (monthly: number) =>
-  philHealthTable
+const computePhilHealth = (monthly: number) => {
+  let year = new Date().getFullYear()
+  if (year > 2024) {
+    year = 2024
+  }
+  return philHealth[year]
     .filter((q) => bracket(q[0] as number, q[1] as number)(monthly))
     .reduce((p, q) => (p += (q[2] as (mon: number) => number)(monthly)), 0) *
   0.5;
+}
 
 export const computeContributions = (
   employeeType: IEmployerType,
