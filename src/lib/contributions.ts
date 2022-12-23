@@ -67,15 +67,17 @@ const computeSss = (salary: number) => {
 };
 
 const computePhilHealth = (monthly: number) => {
-  let year = new Date().getFullYear()
+  let year = new Date().getFullYear();
   if (year > 2024) {
-    year = 2024
+    year = 2024;
   }
-  return philHealth[year]
-    .filter((q) => bracket(q[0] as number, q[1] as number)(monthly))
-    .reduce((p, q) => (p += (q[2] as (mon: number) => number)(monthly)), 0) *
-  0.5;
-}
+  return (
+    philHealth[year]
+      .filter((q) => bracket(q[0] as number, q[1] as number)(monthly))
+      .reduce((p, q) => (p += (q[2] as (mon: number) => number)(monthly)), 0) *
+    0.5
+  );
+};
 
 export const computeContributions = (
   employeeType: IEmployerType,

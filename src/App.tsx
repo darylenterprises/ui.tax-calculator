@@ -62,13 +62,13 @@ function App() {
     deminimis: "",
     employerType: "pvt",
   });
-  
+
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [use2023, setUse2023] = useState(new Date().getFullYear() >= 2023);
   const [period, setPeriod] = useState<ISummaryPeriod>("Annual");
   const [contributions, setContributions] =
     useState<IMandatoryContributions>(initialContributions);
-  useEffect(() => { });
+  useEffect(() => {});
   const [summary, setSummary] = useState<ITaxSummary>({
     gross: 0,
     taxable: 0,
@@ -125,11 +125,14 @@ function App() {
           display={"flex"}
           justifyContent={"end"}
         >
-          <Button shape="pill" size="mini" onClick={() => setOpenPreference(true)}>
+          <Button
+            shape="pill"
+            size="mini"
+            onClick={() => setOpenPreference(true)}
+          >
             Preferences
           </Button>
         </Block>
-
 
         <Block
           marginTop={[0, 0, "5rem", "5rem"]}
