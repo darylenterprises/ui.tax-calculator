@@ -49,7 +49,10 @@ const Contributions: React.FC<IContributionProps> = (props) => {
             {t("contributions.gsis.label")}
           </ContributionItem>
         )}
-        <ContributionItem value={c.philHealth}>
+        <ContributionItem
+          value={c.philHealth}
+          desc={`${c.philHealthYear} bracket`}
+        >
           {t("contributions.philHealth.label")}
         </ContributionItem>
         <ContributionItem

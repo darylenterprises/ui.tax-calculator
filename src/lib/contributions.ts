@@ -66,13 +66,9 @@ const computeSss = (salary: number) => {
   return { sss, mpf };
 };
 
-const computePhilHealth = (monthly: number) => {
-  let year = new Date().getFullYear();
-  if (year > 2024) {
-    year = 2024;
-  }
+const computePhilHealth = (monthly: number, philHealthYear: number) => {
   return (
-    philHealth[year]
+    philHealth[philHealthYear]
       .filter((q) => bracket(q[0] as number, q[1] as number)(monthly))
       .reduce((p, q) => (p += (q[2] as (mon: number) => number)(monthly)), 0) *
     0.5
@@ -81,11 +77,13 @@ const computePhilHealth = (monthly: number) => {
 
 export const computeContributions = (
   employeeType: IEmployerType,
-  monthly: number
+  monthly: number,
+  philHealthYear: number
 ): IMandatoryContributions => ({
   sss: employeeType === "pvt" ? computeSss(monthly).sss : NaN,
   sssMpf: employeeType === "pvt" ? computeSss(monthly).mpf : NaN,
   gsis: employeeType === "govt" ? monthly * 0.09 : NaN,
   pagibig: 100,
-  philHealth: computePhilHealth(monthly),
+  philHealth: computePhilHealth(monthly, philHealthYear),
+  philHealthYear,
 });

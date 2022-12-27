@@ -4,6 +4,7 @@ interface IMandatoryContributions {
   sss: number;
   sssMpf: number;
   gsis: number;
+  philHealthYear: number;
 }
 
 type IEmployerType = "govt" | "pvt";

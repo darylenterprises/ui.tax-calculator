@@ -1,13 +1,11 @@
 import { styled, useStyletron } from "baseui";
 import { Block } from "baseui/block";
 import { Button } from "baseui/button";
-import { Checkbox, LABEL_PLACEMENT, STYLE_TYPE } from "baseui/checkbox";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
 import { StyledLink } from "baseui/link";
 import { ALIGN, Radio, RadioGroup } from "baseui/radio";
 import {
   LabelLarge,
-  LabelSmall,
   LabelXSmall,
   ParagraphMedium,
   ParagraphSmall,
@@ -27,6 +25,7 @@ import {
   getTaxBracketCalculation,
 } from "./lib/ra-10963";
 import Preferences from "./components/preferences";
+import { usePreferences } from "./providers/PreferenceProvider";
 
 const Panel = styled("div", (props) => ({
   // border: `${props.$theme.borders.border600.borderStyle} ${props.$theme.borders.border600.borderWidth} ${props.$theme.borders.border600.borderColor}`,
@@ -52,10 +51,12 @@ const initialContributions = {
   gsis: 0,
   pagibig: 0,
   philHealth: 0,
+  philHealthYear: 0,
 };
 
 function App() {
   const { t } = useTranslation();
+  const { value: preferences } = usePreferences();
   const [openPreference, setOpenPreference] = useState(false);
   const [values, setValues] = useState<IIncomeForm>({
     monthly: "20000",
@@ -91,23 +92,27 @@ function App() {
       : parseFloat(values.deminimis);
     const annual = computeAnnual(_monthly);
     console.log(_monthly);
-    const contributions = computeContributions(values.employerType, _monthly);
+    const contributions = computeContributions(
+      values.employerType,
+      _monthly,
+      preferences.philHealthYear
+    );
     console.log(contributions);
     console.log(values.employerType);
     const taxable = computeTaxableIncome(annual, contributions, _deminimis);
     setContributions(contributions);
-    const taxDue = computeTaxDue(taxable.taxable, use2023 ? "2023" : "2018");
+    const taxDue = computeTaxDue(taxable.taxable, preferences.taxRateYear);
     setSummary({
       ...taxable,
       taxDue,
       taxComputation: getTaxBracketCalculation(
         taxable.taxable,
-        use2023 ? "2023" : "2018"
+        preferences.taxRateYear
       ),
       takeHome: taxable.gross - taxDue - taxable.totalContribution,
       period,
     });
-  }, [values, use2023, period]);
+  }, [values, use2023, period, preferences]);
 
   return (
     <>
@@ -256,7 +261,8 @@ function App() {
                     {t("info.about")}
                   </ParagraphSmall>
                 </Panel>
-                {showAdvanced && (
+
+                {/* {showAdvanced && (
                   <Panel
                     style={{
                       marginTop: theme.sizing.scale800,
@@ -303,7 +309,7 @@ function App() {
                   >
                     {t(showAdvanced ? "advanced.hide" : "advanced.show")}
                   </LabelSmall>
-                </Block>
+                </Block> */}
               </Block>
             </FlexGrid>
           </Block>

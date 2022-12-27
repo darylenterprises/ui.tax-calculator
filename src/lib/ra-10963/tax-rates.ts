@@ -30,7 +30,7 @@ const bracketCondition = (lower: number, upper: number) => (income: number) =>
   (Number.isNaN(lower) || income > lower) &&
   (Number.isNaN(upper) || income <= upper);
 
-const brackets: { [key: string]: IBracket[] } = {
+const brackets: { [key: number]: IBracket[] } = {
   2018: [
     {
       condition: bracketCondition(NaN, 250000),
@@ -85,7 +85,7 @@ const brackets: { [key: string]: IBracket[] } = {
   ],
 };
 
-const bracketInfo: { [key: string]: IBracketInfo[] } = {
+const bracketInfo: { [key: number]: IBracketInfo[] } = {
   2018: [
     {
       condition: bracketCondition(NaN, 250000),
@@ -158,13 +158,10 @@ const bracketInfo: { [key: string]: IBracketInfo[] } = {
 
 export const getTaxBracketCalculation = (
   taxableIncome: number,
-  period: "2018" | "2023" = "2018"
+  period: number
 ) => bracketInfo[period].find((q) => q.condition(taxableIncome)).display;
 
-export const computeTaxDue = (
-  taxableIncome: number,
-  period: "2018" | "2023" = "2018"
-) =>
+export const computeTaxDue = (taxableIncome: number, period: number) =>
   brackets[period]
     .filter((q) => q.condition(taxableIncome))
     .reduce((total, bracket) => (total += bracket.calculate(taxableIncome)), 0);

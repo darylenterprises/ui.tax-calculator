@@ -3,6 +3,7 @@ import {
   LightTheme,
   DarkTheme,
   ThemeProvider as BaseThemeProvider,
+  BaseProvider,
 } from "baseui";
 
 type THEME = "dark" | "light";
@@ -24,9 +25,11 @@ const ThemeProvider: React.FC<{ theme: THEME }> = (props) => {
   const changeTheme = setTheme;
   return (
     <ThemeContext.Provider value={{ theme, changeTheme }}>
-      <BaseThemeProvider theme={theme === "light" ? LightTheme : DarkTheme}>
-        {props.children}
-      </BaseThemeProvider>
+      <BaseProvider theme={theme === "light" ? LightTheme : DarkTheme}>
+        <BaseThemeProvider theme={theme === "light" ? LightTheme : DarkTheme}>
+          {props.children}
+        </BaseThemeProvider>
+      </BaseProvider>
     </ThemeContext.Provider>
   );
 };
